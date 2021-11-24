@@ -20,6 +20,10 @@ import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation.Navigation.findNavController
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -55,6 +59,10 @@ class PlantDetailFragmentTest {
     // Note that keeping these references is only safe if the activity is not recreated.
     private lateinit var activity: ComponentActivity
 
+    @Rule
+    @JvmField
+    val composeTestRule = createAndroidComposeRule<GardenActivity>()
+
     @Before
     fun jumpToPlantDetailFragment() {
         populateDatabase()
@@ -69,10 +77,8 @@ class PlantDetailFragmentTest {
 
     @Test
     fun testPlantName() {
-        onView(ViewMatchers.withText("Apple"))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        composeTestRule.onNodeWithText("Apple").assertIsDisplayed()
     }
-
     @Test
     fun testShareTextIntent() {
         val shareText = activity.getString(R.string.share_text_plant, testPlant.name)
